@@ -23,4 +23,42 @@ func main() {
 // len(sli1)=1, cap(sli1)=2
 // len(sli2)=1, cap(sli2)=7
 
-//********************************************************************
+//********************************************************************************************
+// 2.方法中,方法的接受者类型,带*与不带*有什么区别?
+
+//   带*:传入的是接受者类型的指针,可使用指针直接对原调用对象进行修改
+// 不带*:传入的是接受者类型的实例,即原调用对象的拷贝,无法对原调用对象进行操作
+package main
+
+import "fmt"
+
+func main() {
+	smp := Sample{ID: 2}
+	fmt.Println("raw ID:", smp.ID)
+	smp.DoSomethingElse()
+	fmt.Println("ID after calling function DoSomethingElse:", smp.ID)
+	smp.DoSomething()
+	fmt.Println("ID after calling DoSomething:", smp.ID)
+}
+
+type Sample struct {
+	ID int
+}
+
+func (s *Sample) DoSomething() {
+	fmt.Println("ID in function DoSomething:", s.ID)
+	s.ID *= 10
+}
+
+func (s Sample) DoSomethingElse() {
+	fmt.Println("ID in function DoSomethingElse:", s.ID)
+	s.ID *= 10
+}
+
+// raw ID: 2
+// ID in function DoSomethingElse: 2
+// ID after calling function DoSomethingElse: 2
+// ID in function DoSomething: 2
+// ID after calling DoSomething: 20
+
+//********************************************************************************************
