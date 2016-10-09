@@ -20,7 +20,7 @@ func main() {
 	fmt.Println("len(sli1)", len(sli1), "cap(sli1)", cap(sli1))
 	fmt.Println("len(sli2)", len(sli2), "cap(sli2)", cap(sli2))
 }
-
+// 输出:
 // len(sli1)=1, cap(sli1)=2
 // len(sli2)=1, cap(sli2)=7
 
@@ -55,7 +55,7 @@ func (s Sample) DoSomethingElse() {
 	fmt.Println("ID in function DoSomethingElse:", s.ID)
 	s.ID *= 10
 }
-
+// 输出:
 // raw ID: 2
 // ID in function DoSomethingElse: 2
 // ID after calling function DoSomethingElse: 2
@@ -87,10 +87,33 @@ func Divide(divedend, divisor int32) (int32, error) {
 	}
 	return divedend / divisor, nil
 }
+// 输出:
+// Error:divisor can't be zero!
 
 //************************************************************************************************************************************
 // 4.编写一个函数,实现字符串反转,函数输入类型为string
 
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println(strReverse("hello, gopher!"))
+}
+
+func strReverse(input string) string {
+	rinput := []rune(input)
+	ln := len(rinput)
+	hln := ln / 2
+
+	for i := 0; i < hln; i++ {
+		rinput[i], rinput[ln-i-1] = rinput[ln-i-1], rinput[i]
+	}
+	return string(rinput)
+}
+
+// 输出:
+// !rehpog ,olleh
 
 //************************************************************************************************************************************
 // 5.编写一个程序,实现两个go程之间互相通讯
