@@ -64,3 +64,32 @@ func (s Sample) DoSomethingElse() {
 //************************************************************************************************************************************
 // 3.写一个简单的实例方法,实现面向对象的多态
 
+package main
+
+import "fmt"
+
+func main() {
+	if _, err := Divide(2, 0); err != nil {
+		fmt.Println(err)
+	}
+}
+
+type DivisorError string
+
+func (e DivisorError) Error() string {
+	return string(e)
+}
+
+func Divide(divedend, divisor int32) (int32, error) {
+	if divisor == 0 {
+		return 0, DivisorError("Error:divisor can't be zero!")
+	}
+	return divedend / divisor, nil
+}
+
+//************************************************************************************************************************************
+// 4.编写一个函数,实现字符串反转,函数输入类型为string
+
+
+//************************************************************************************************************************************
+// 5.编写一个程序,实现两个go程之间互相通讯
