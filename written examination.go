@@ -117,3 +117,49 @@ func strReverse(input string) string {
 
 //************************************************************************************************************************************
 // 5.编写一个程序,实现两个go程之间互相通讯
+
+package main
+
+import "fmt"
+
+func main() {
+	const maxLength = 10
+	ch := make(chan Fact)
+
+	fmt.Println("Factorial:")
+	for i := 1; i <= maxLength; i++ {
+		go factorial(i, ch)
+	}
+	for i := 1; i <= maxLength; i++ {
+		f := <-ch
+		fmt.Printf("%2d!=%-d\n", f.Num, f.Factorial)
+	}
+}
+
+//Fact 存储阶乘结果
+type Fact struct {
+	Num       int
+	Factorial int64
+}
+
+func factorial(n int, rst chan Fact) {
+	res := int64(1)
+	for i := 1; i <= n; i++ {
+		res *= int64(i)
+	}
+
+	rst <- Fact{n, res}
+}
+
+// 输出(随机):
+// Factorial:
+//  1!=1
+//  2!=2
+//  3!=6
+//  4!=24
+//  6!=720
+//  5!=120
+//  8!=40320
+//  7!=5040
+//  9!=362880
+// 10!=3628800
