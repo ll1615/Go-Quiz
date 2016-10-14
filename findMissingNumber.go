@@ -28,6 +28,9 @@ func findMissingNum(nums []int) (int, int) {
 		diffIndex = diffIndex << 1
 		xor = xor >> 1
 	}
+	// for xor&diffIndex == 0 {
+	//  	 diffIndex = diffIndex << 1
+	// }
 
 	var n1, n2 int
 	for i := 0; i < ln; i++ {
