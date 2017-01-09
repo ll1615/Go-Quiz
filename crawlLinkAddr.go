@@ -20,7 +20,7 @@ type ulink struct {
 }
 
 var (
-	crawlDepth = 2
+	crawlDepth = flag.Int("d", 1, "depth of the crawler")
 	sourceLink = flag.String("l", "", "provide the source link to crawl")
 )
 
@@ -40,7 +40,7 @@ func main() {
 	for i := 0; i < 20; i++ {
 		go func() {
 			for unlink := range unseenlinks {
-				if unlink.depth > crawlDepth {
+				if unlink.depth > *crawlDepth {
 					os.Exit(0)
 				}
 
