@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -18,14 +19,22 @@ type ulink struct {
 	depth int
 }
 
-var crawlDepth = 2
+var (
+	crawlDepth = 2
+	sourceLink = flag.String("l", "", "provide the source link to crawl")
+)
 
 func main() {
 	worklist := make(chan list)
 	unseenlinks := make(chan ulink)
 
+	flag.Parse()
+	if *sourceLink == "" {
+		log.Fatalln("Please input the link to crawl with -l ")
+	}
+
 	go func() {
-		worklist <- list{os.Args[1:], 0}
+		worklist <- list{[]string{*sourceLink}, 0}
 	}()
 
 	for i := 0; i < 20; i++ {
@@ -61,3 +70,4 @@ func crawl(url string, depth int) list {
 	}
 	return list{linklist, depth + 1}
 }
+
