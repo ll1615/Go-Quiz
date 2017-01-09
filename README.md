@@ -1,1 +1,1 @@
-# Go-Quiz
+# Snippets while learning go
