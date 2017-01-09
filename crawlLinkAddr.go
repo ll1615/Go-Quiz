@@ -25,8 +25,8 @@ var (
 )
 
 func main() {
-	worklist := make(chan list)
-	unseenlinks := make(chan ulink)
+	worklist := make(chan *list)
+	unseenlinks := make(chan *ulink)
 
 	flag.Parse()
 	if *sourceLink == "" {
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	go func() {
-		worklist <- list{[]string{*sourceLink}, 0}
+		worklist <- &list{[]string{*sourceLink}, 0}
 	}()
 
 	for i := 0; i < 20; i++ {
@@ -43,7 +43,12 @@ func main() {
 				if unlink.depth > crawlDepth {
 					os.Exit(0)
 				}
-				foundlinks := crawl(unlink.link, unlink.depth)
+
+				foundlinks := crawl(unlink)
+				if foundlinks == nil {
+					continue
+				}
+
 				go func() { worklist <- foundlinks }()
 			}
 		}()
@@ -54,20 +59,21 @@ func main() {
 		for _, link := range wlist.links {
 			if !seen[link] {
 				seen[link] = true
-				unseenlinks <- ulink{link, wlist.depth}
+				unseenlinks <- &ulink{link, wlist.depth}
 			}
 		}
 	}
 }
 
-func crawl(url string, depth int) list {
-	fmt.Println(url)
+func crawl(ul *ulink) *list {
+	fmt.Println(ul.link)
 
-	linklist, err := links.Extract(url)
+	linklist, err := links.Extract(ul.link)
 
 	if err != nil {
-		log.Print(err)
+		log.Print("crawler "+ul.link+" error: ", err)
+		return nil
 	}
-	return list{linklist, depth + 1}
-}
 
+	return &list{linklist, ul.depth + 1}
+}
