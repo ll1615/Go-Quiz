@@ -6,12 +6,17 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
+	"sync"
 	"time"
 )
 
 var verbose = flag.Bool("v", false, "show verbose progress messages")
+var sema = make(chan struct{}, 20)
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	flag.Parse()
 	roots := flag.Args()
 	if len(roots) == 0 {
@@ -20,10 +25,15 @@ func main() {
 
 	// Traverse the file tree.
 	fileSizes := make(chan int64)
+	var n sync.WaitGroup
+
+	for _, root := range roots {
+		n.Add(1)
+		go walkDir(root, &n, fileSizes)
+	}
+
 	go func() {
-		for _, root := range roots {
-			walkDir(root, fileSizes)
-		}
+		n.Wait()
 		close(fileSizes)
 	}()
 
@@ -50,11 +60,13 @@ loop:
 	printDiskUsage(nfiles, nbytes)
 }
 
-func walkDir(dir string, fileSizes chan<- int64) {
+func walkDir(dir string, n *sync.WaitGroup, fileSizes chan<- int64) {
+	defer n.Done()
 	for _, entry := range dirents(dir) {
 		if entry.IsDir() {
+			n.Add(1)
 			subdir := filepath.Join(dir, entry.Name())
-			walkDir(subdir, fileSizes)
+			go walkDir(subdir, n, fileSizes)
 		} else {
 			fileSizes <- entry.Size()
 		}
@@ -62,6 +74,8 @@ func walkDir(dir string, fileSizes chan<- int64) {
 }
 
 func dirents(dir string) []os.FileInfo {
+	sema <- struct{}{}
+	defer func() { <-sema }()
 	entries, err := ioutil.ReadDir(dir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "du: %v\n", err)
