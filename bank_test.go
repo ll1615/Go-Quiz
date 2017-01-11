@@ -9,48 +9,52 @@ func TestBank(t *testing.T) {
 	done := make(chan struct{})
 
 	// Alice
-	go func() {
-		Deposit(200)
+	for i := 0; i < 1000; i++ {
+		go func() {
+			Deposit(200)
 
-		if ok := Withdraw(20); ok {
-			fmt.Println("Withdraw 20")
-		} else {
-			fmt.Println("Can't withdraw 20")
-		}
+			if ok := Withdraw(20); ok {
+				fmt.Println("Withdraw 20")
+			} else {
+				fmt.Println("Can't withdraw 20")
+			}
 
-		if ok := Withdraw(400); ok {
-			fmt.Println("Withdraw 400")
-		} else {
-			fmt.Println("Can't withdraw 400")
-		}
+			if ok := Withdraw(4000); ok {
+				fmt.Println("Withdraw 4000")
+			} else {
+				fmt.Println("Can't withdraw 4000")
+			}
 
-		fmt.Println("=", Balance())
-
-		done <- struct{}{}
-	}()
+			done <- struct{}{}
+		}()
+	}
 
 	// Bob
-	go func() {
-		Deposit(100)
-		if ok := Withdraw(20); ok {
-			fmt.Println("Withdraw 20")
-		} else {
-			fmt.Println("Can't withdraw 20")
-		}
+	for i := 0; i < 1000; i++ {
+		go func() {
+			Deposit(100)
+			if ok := Withdraw(20); ok {
+				fmt.Println("Withdraw 20")
+			} else {
+				fmt.Println("Can't withdraw 20")
+			}
 
-		if ok := Withdraw(400); ok {
-			fmt.Println("Withdraw 400")
-		} else {
-			fmt.Println("Can't withdraw 400")
-		}
-		done <- struct{}{}
-	}()
+			if ok := Withdraw(4000); ok {
+				fmt.Println("Withdraw 4000")
+			} else {
+				fmt.Println("Can't withdraw 4000")
+			}
+			done <- struct{}{}
+		}()
+	}
 
 	// Wait for both transactions.
-	<-done
-	<-done
+	for i := 0; i < 2000; i++ {
+		<-done
+	}
 
-	if got, want := Balance(), 260; got != want {
+	if got, want := Balance(), 0; got != want {
 		t.Errorf("Balance = %d, want %d", got, want)
 	}
 }
+
