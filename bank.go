@@ -3,19 +3,21 @@
 
 package bank
 
-import "fmt"
+type WithdrawData struct {
+	amount   int
+	resultCh chan bool
+}
 
+var withdrawCh = make(chan WithdrawData)
 var deposits = make(chan int) // send amount to deposit
 var balances = make(chan int) // receive balances
 
 func Deposit(amount int) { deposits <- amount }
 func Balance() int       { return <-balances }
 func Withdraw(amount int) bool {
-	if Balance() < amount {
-		return false
-	}
-	deposits <- -amount
-	return true
+	ch := make(chan bool)
+	withdrawCh <- WithdrawData{amount, ch}
+	return <-ch
 }
 
 func teller() {
@@ -24,6 +26,13 @@ func teller() {
 		select {
 		case amount := <-deposits:
 			balance += amount
+		case withdrawData := <-withdrawCh:
+			if balance >= withdrawData.amount {
+				balance -= withdrawData.amount
+				withdrawData.resultCh <- true
+			} else {
+				withdrawData.resultCh <- false
+			}
 		case balances <- balance:
 		}
 	}
