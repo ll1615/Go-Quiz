@@ -9,8 +9,8 @@ import (
 
 func main() {
 	arr := "  123123胜多   负少  打请问覅瓯        海区沃尔  夫hi水    电费qwoeiuh2131    "
-	fmt.Printf("%7s:%v\n", "before", arr)
-	fmt.Printf("%7s:%s\n", "after", string(trimSpace([]byte(arr))))
+	fmt.Printf("%6s:|%s|\n", "before", arr)
+	fmt.Printf("%6s:|%s|\n", "after", string(trimSpace([]byte(arr))))
 }
 
 func trimSpace(byt []byte) []byte {
@@ -30,5 +30,6 @@ func trimSpace(byt []byte) []byte {
 	return byt
 }
 
-//  before:  123123胜多   负少  打请问覅瓯        海区沃尔  夫hi水    电费qwoeiuh2131
-//   after: 123123胜多 负少 打请问覅瓯 海区沃尔 夫hi水 电费qwoeiuh2131
+// 输出:
+//before:|  123123胜多   负少  打请问覅瓯        海区沃尔  夫hi水    电费qwoeiuh2131    |
+// after:| 123123胜多 负少 打请问覅瓯 海区沃尔 夫hi水 电费qwoeiuh2131 |
