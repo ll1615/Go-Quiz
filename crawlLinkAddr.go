@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/ll1615/go-snippets/links"
+	"github.com/ll1615/go-snippets/lib"
 )
 
 type list struct {
@@ -68,7 +68,7 @@ func main() {
 func crawl(ul *ulink) *list {
 	fmt.Println(ul.link)
 
-	linklist, err := links.Extract(ul.link)
+	linklist, err := lib.Extract(ul.link)
 
 	if err != nil {
 		log.Print("crawler "+ul.link+" error: ", err)
