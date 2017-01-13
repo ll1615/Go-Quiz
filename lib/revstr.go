@@ -1,16 +1,7 @@
-//Q: 修改reverse函数用于原地反转UTF-8编码的[]byte。是否可以不用分配额外的内存？
+package lib
 
-package main
-
-import "fmt"
-
-func main() {
-	str := "234监考老师电话费35sf飞机dfd"
-	fmt.Printf("%6s: %s\n", "before", str)
-	fmt.Printf("%6s: %s\n", "after", string(reverse([]byte(str))))
-}
-
-func reverse(s []byte) []byte {
+// Reverse a slice of byte without allocation extra memory.
+func Reverse(s []byte) []byte {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
 	}
@@ -33,10 +24,6 @@ func reverse(s []byte) []byte {
 	}
 	return s
 }
-
-// output:
-// before: 234监考老师电话费35sf飞机dfd
-//  after: dfd机飞fs53费话电师老考监432
 
 // utf8:
 // 0xxxxxxx                             runes 0-127    (ASCII)
