@@ -1,5 +1,5 @@
-// Package links provides a link-extraction function.
-package links
+// Provides a link-extraction function.
+package lib
 
 import (
 	"fmt"
