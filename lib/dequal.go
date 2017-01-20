@@ -1,4 +1,4 @@
-package dequal
+package lib
 
 import (
 	"reflect"
@@ -72,8 +72,8 @@ func equal(x, y reflect.Value, seen map[comparison]bool) bool {
 	panic("unreachable")
 }
 
-// Equal reports whether x and y are deeply equal.
-func Equal(x, y interface{}) bool {
+// DEqual reports whether x and y are deeply equal.
+func DEqual(x, y interface{}) bool {
 	seen := make(map[comparison]bool)
 	return equal(reflect.ValueOf(x), reflect.ValueOf(y), seen)
 }

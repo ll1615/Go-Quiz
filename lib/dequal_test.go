@@ -1,5 +1,5 @@
-// Coverage: 94.9% 
-package dequal
+// Coverage: 94.9%
+package lib
 
 import "testing"
 
@@ -49,7 +49,7 @@ func TestEqual(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got, want := Equal(test.x, test.y), test.want; got != want {
+		if got, want := DEqual(test.x, test.y), test.want; got != want {
 			t.Errorf("DeepEqual(%v, %v) = %t, want %t", test.x, test.y, got, want)
 		}
 	}

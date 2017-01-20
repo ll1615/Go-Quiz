@@ -1,4 +1,4 @@
-// keep unsafe variable in multi-goroutine in a single coroutine
+// keep unsafe variable in single coroutine
 // to secure the variable.
 
 package bank

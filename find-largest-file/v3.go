@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"sync"
-
-	"github.com/ll1615/lib"
 )
 
 const (
@@ -20,8 +18,6 @@ const (
 var sema = make(chan struct{}, 20)
 
 func main() {
-	defer lib.Trace("main")()
-
 	var wg sync.WaitGroup
 	runtime.GOMAXPROCS(runtime.NumCPU())
 

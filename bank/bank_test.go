@@ -9,7 +9,7 @@ func TestBank(t *testing.T) {
 	done := make(chan struct{})
 
 	// Alice
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
 		go func() {
 			Deposit(200)
 
@@ -30,7 +30,7 @@ func TestBank(t *testing.T) {
 	}
 
 	// Bob
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 100; i++ {
 		go func() {
 			Deposit(100)
 			if ok := Withdraw(20); ok {
@@ -49,7 +49,7 @@ func TestBank(t *testing.T) {
 	}
 
 	// Wait for both transactions.
-	for i := 0; i < 2000; i++ {
+	for i := 0; i < 200; i++ {
 		<-done
 	}
 
@@ -57,4 +57,3 @@ func TestBank(t *testing.T) {
 		t.Errorf("Balance = %d, want %d", got, want)
 	}
 }
-
