@@ -29,9 +29,9 @@ func UniqueList(list []interface{}) []interface{} {
 
 // ListAnd do and operation for 2 lists
 func ListAnd(list1, list2 []interface{}) []interface{} {
-	newList := make([]interface{}, 0)
+	newList := make([]interface{}, 0, len(list1))
 	for _, item := range list1 {
-		if IsInList(list2, item) && !IsInList(newList, item) {
+		if IsInList(list2, item) {
 			newList = append(newList, item)
 		}
 	}
